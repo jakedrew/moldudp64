@@ -1,21 +1,16 @@
-# build
-FROM alpine:latest AS builder
+FROM alpine:3.20 AS build
+RUN apk add --no-cache g++ make
 WORKDIR /app
 
-RUN apk add --no-cache build-base
-
-COPY Makefile ./
-COPY src ./src
-
+COPY . .
 RUN make
 
-# run
-FROM alpine:latest
+# -------------------------
+FROM alpine:3.20
+RUN apk add --no-cache libstdc++
 WORKDIR /app
 
-RUN apk add --no-cache ca-certificates libstdc++ libgcc
+COPY --from=build /app/send /app/recv /app/start.sh ./
 
-COPY --from=builder /app/build ./build
-
-EXPOSE 1121
-CMD ["./build/http-server"]
+EXPOSE 8080
+CMD ["sh", "./start.sh"]

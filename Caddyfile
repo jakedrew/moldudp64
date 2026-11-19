@@ -1,4 +1,4 @@
-http-server.jakedrw.com {
-    reverse_proxy http-server:1121 {
+mold.jakedrw.com {
+    reverse_proxy mold:8080 {
     }
 }

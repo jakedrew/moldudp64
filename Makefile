@@ -1,9 +1,13 @@
-CXXFLAGS = -std=c++20 -O2 -Wall -Wextra
+CXX      ?= g++
+CXXFLAGS ?= -std=c++20 -O2 -Wall -Wextra -Ithird_party
 
-build/http-server: src/main.cpp
-	mkdir -p $(@D)
+all: send recv
+
+send: src/mold_send.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 
-.PHONY: clean
+recv: src/mold_recv.cpp
+	$(CXX) $(CXXFLAGS) $< -o $@ -pthread
+
 clean:
-	rm -rf build
+	rm -f send recv
